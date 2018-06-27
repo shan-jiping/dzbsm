@@ -1,0 +1,15 @@
+---
+- hosts: '{{ hosts }}'
+  tasks:
+  - name: del chattr   hosts.allow
+    command: chattr -a -i /etc/hosts.allow
+  - name: upload hosts.allow
+    copy: src=/data/konghaiyang/1204/hosts.allow dest=/etc/hosts.allow mode=444
+  - name: add chattr  /hosts.allow
+    command: chattr +a +i /etc/hosts.allow
+  - name: upload authorized_keys
+    copy: src=/data/konghaiyang/1204/authorized_keys dest=/root/.ssh/authorized_keys mode=600
+  - name: upload sshd_config
+    copy: src=/data/konghaiyang/1204/sshd_config dest=/etc/ssh/sshd_config mode=600
+  - name: restart sshd
+    service: name=sshd state=restarted  

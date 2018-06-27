@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% load staticfiles %}
+{% block custom_bread %}
+{% endblock %}
+
+
+{% block content %}
+
+{% for k,v in info.items %}
+   {{ k }} {{ v }} </br>
+{% endfor %}
+
+{% endblock %}
+
+
+{% block custom_js %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% for k,v in info.items %}
+   {% ifequal  k 'success' %}
+       {% for ip,r in v.items %}
+           {{ k }} {{ ip }} >>> {{ r.stdout }} </br>
+       {% endfor %}
+   {% else %}
+       {% for ip,r in v.items %}
+           {{ k }} {{ ip }} >>> {{ r }} </br>
+       {% endfor %}
+   {% endifequal %}
+{% endfor %}

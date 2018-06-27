@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+
+{% load staticfiles %}
+{% block custom_bread %}
+{% endblock %}
+
+
+{% block content %}
+
+</br>
+</br>
+
+<div>
+<h1 align="center"  style="color:red ; font-size:50px">空闲可用UID数量:{{ free_uid }}</h1></br>
+<form class="clearfix" id="jsEditUserForm" autocomplete="off" method="post" action="{% url 'action:init2101'%}">
+               
+		初始化IP列表 (以,分隔)：<input type="text"  name="ip" id="ip" />
+		<input class="button" type="submit" id="jsEditUserBtn" value="    保存    "/>
+	{% csrf_token %}
+</form>
+</div>
+<div>
+						<h3>2101 机器列表</h3>
+                                                  {% for group in groups  %}
+                                                  {{ group }}</br>
+                                                  {% endfor %}
+<div>
+
+{% endblock %}
+
+
+{% block custom_js %}
+{% endblock %}

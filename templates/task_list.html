@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+
+{% load staticfiles %}
+{% block custom_bread %}
+{% endblock %}
+
+
+{% block content %}
+
+
+
+
+<form class="clearfix" id="jsEditUserForm" autocomplete="off" method="post" action="{% url 'action:mytask'%}">
+	<table id="tableSort" border="2" align="center">
+                
+		<tr><td valign="top">动作类型：</td><td style="width:350px" > <select name="Type" id="Type">
+						  <option value ="ansible">ansible</option>
+						  <option value ="playbook">playbook</option>
+						  <option value="conn">conn</option>
+						</select></td></tr>
+		<tr><td valign="top">主机组 ：</td><td><select name="group" id="group">
+                                                  {% for group in groups  %}
+						  <option value ="{{ group }}">{{ group }}</option>
+                                                  {% endfor %}
+						</select></td></tr>
+		<tr><td valign="top">模块/playbook：</td><td><input style="width:250px" type="text" name="model" id="model" value="" maxlength="60"><i class="error-tips"/></i></td></tr>
+		<tr><td valign="top">参数/command：</td><td><input style="width:250px" type="text" name="args" id="args" value="" maxlength="60"><i class="error-tips"/></i></td></tr>
+		<tr><td colspan="2" align="center" ><input class="button" type="submit" id="jsEditUserBtn" value="    保存    "/></td></tr>
+	</table>
+	{% csrf_token %}
+</form>
+</br>
+<table id="tableSort" border="2" align="center">
+<thead><tr><th type="string">创建时间</th><th type="string">创建用户</th><th type="string">动作</th><th type="string">主机组/ip</th><th type="string">模块/playbook</th><th type="string">参数/command</th><th type="string">参数/command</th></tr></thead><tbody>
+{% for task in tasks %}
+<tr><td class="sequence" valign="top" >{{ task.create_time }}</td><td valign="top" >{{ task.create_user }}</td><td valign="top" >{{ task.Type }}</td><td valign="top" > {% if task.group_id != None %}  {{ task.group }} {% else %} {{ task.host.ip }}   {% endif %}    </td><td valign="top" >{{ task.model }}</td><td valign="top" >{{ task.args }}</td><td valign="top" > <a href="{% url 'action:mytask_result' task.id %}"> {{ task.status }}</a></td></tr>
+{% endfor %}
+</tbody></table>
+
+
+
+{% endblock %}
+
+
+{% block custom_js %}
+{% endblock %}

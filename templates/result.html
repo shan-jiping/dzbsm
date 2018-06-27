@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+{% load staticfiles %}
+{% block custom_bread %}
+{% endblock %}
+
+
+{% block content %}
+<div><a href="/action/">任务</a></div>
+<div><a href="/action/init/2101/">2101初始化</a></div>
+
+
+
+
+{% for ip,s in info.success.items  %}
+<table>
+<tr><td valign="top" >success</td> <td valign="top" > {{ ip }}</td><td valign="top" > {% for l in s.stdout_lines %}  {{l}}</br>  {% endfor %}</td></tr>
+</table>
+{% endfor %}
+{% for ipf,f in info.fail.items  %}
+<table>
+<tr><td valign="top" >fail</td> <td valign="top" > {{ ipf }}</td><td valign="top" > {{ f.stdout }}</td></tr>
+</table>
+
+{% endfor %}
+{% for ipu,u in info.unreachable.items  %}
+<table>
+<tr><td valign="top" >unreachable</td> <td valign="top" > {{ ipu }}</td><td valign="top" > {{ u.stdout }}</td></tr>
+</table>
+{% endfor %}
+
+
+
+
+{% endblock %}
+
+
+{% block custom_js %}
+{% endblock %}

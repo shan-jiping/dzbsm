@@ -1,0 +1,7 @@
+---
+- hosts: '{{ hosts }}'
+  tasks:
+  - name: del cron
+    command: sed -i '/killall pzs/d' /var/spool/cron/root
+  - name: start
+    command: sh /usr/local/src/deploy/script/crontab/2101/mount2101.sh 
