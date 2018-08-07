@@ -9,6 +9,11 @@ from django.http import HttpResponse
 from .tasks import task_run,test_run,pb_run
 import logging
 import redis
+import os
+import urllib2
+import urllib
+import json
+import time
 # Create your views here.
 
 
@@ -25,6 +30,94 @@ class Update_host(View):
     def get(self, request):
         r=host_list()
         return render(request,'test.html',{"info":r})
+
+
+
+def get_tgt_online():
+    url = 'https://apis.dnion.com:8243/cas/v1/tickets'
+    data = {
+        'username': 'shanjiping@dnion.com',
+        'password': 'dnion1234' }
+    req = urllib2.Request(url)
+    data = urllib.urlencode(data)
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
+    response = opener.open(req, data)
+    return response.headers['Location'].split('/')[-1]
+def update_tgt(cachefile):
+    TGT = get_tgt_online()
+    with open(cachefile, 'wb') as f:
+        f.write(TGT)
+    return TGT
+def get_tgt(cachefile):
+    if not os.path.exists(cachefile):
+        TGT = update_tgt(cachefile)
+    else:
+        t0 = os.path.getctime(cachefile)
+        t1 = time.time()
+        if t1 - t0 > 25200:
+            TGT = update_tgt(cachefile)
+        else:
+            f = open(cachefile, 'r')
+            TGT = f.read()
+            f.close()
+    return TGT
+
+def get_platform_list(platform):
+    url='https://apis.dnion.com:8243/machine/platform/allmachines?plNameEn='+platform
+    TGT = get_tgt('TGT')
+    req=urllib2.Request(url)
+    req.add_header('Authorization',TGT)
+    req.add_header('username','shanjiping@dnion.com')
+    res=json.loads(urllib2.urlopen(req).read())
+    return res
+
+
+
+class list_platform(View):
+    def get(self,request):
+        xianlu={
+                                'dx':u'电信',
+                                'lt':u'联通',
+                                'yd':u'移动',
+                                'ck':u'长宽',
+                                'jy':u'教育',
+                                'hs':u'华数',
+                                #'bgp':u'BGP'
+                                'tt':u'铁通'
+                                }
+        try:
+            #args=self.request.arguments
+            #if 'p' in args:
+            #    isp=''
+            #    if 'isp' in args:
+            #        isp=self.get_argument('isp')
+            isp=request.GET.get('isp')
+            platform=request.GET.get('p')
+            if isp == None or platform == None :
+                return HttpResponse('Missing parameter')
+            #    platform=self.get_argument('p')
+            result=get_platform_list(platform)
+            if 'error' in result:
+                return HttpResponse(' get_platform_list error:'+str(result['error']))
+            else:
+                s=''
+                for i in result:
+                    for j in i['platformMachineIpList']:
+                        if j['mcipStatus']==u'2' or j['mcipStatus']==u'1' or j['mcipStatus']==u'5' :
+                            if isp in xianlu :
+                                if xianlu[isp] in j['ipIsp']:
+                                    s=s+str(j['mcipIp'])+'   '+str(j['ipIsp'])+'   '+str(j['ndName'])+'\n'
+                            #else:
+                            #    s=s+j['mcipIp']+'   '+j['ipIsp']+'   '+j['ndName']+'\n'
+            #else:
+            #   self.write('Missing parameter')
+            return HttpResponse(s)
+        except Exception,e:
+            return HttpResponse('捕获异常  '+str(e)+str(result))
+            #self.write(str(e))
+            
+
+
 
 class task_test(View):
     def get(self,request):

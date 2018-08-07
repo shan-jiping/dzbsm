@@ -17,6 +17,7 @@ from django.conf.urls import url,include
 from django.contrib import admin
 from django.views.static import serve
 from users.views import IndexView
+from action.views import list_platform
 import xadmin
 
 
@@ -27,4 +28,5 @@ urlpatterns = [
     url(r'^captcha/', include('captcha.urls')),
     url(r"^users/", include('users.urls', namespace="users")),
     url(r"^action/", include('action.urls', namespace="action")),
+    url('^list_platform', list_platform.as_view(), name="list_platform"),
 ]

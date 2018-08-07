@@ -35,7 +35,10 @@ def task_run(id):
         mytask_result=task_result.objects.get(task_id_id=mytask)
         mytask_result.result=fs
         mytask_result.save()
-        mytask.status='done'
+        if 'success' in fs and len(fs['success']) >0:
+            mytask.status='done'
+        else:
+            mytask.status='error'
         mytask.save()
         #logging.info('------------------------------------')
         #logging.info(ans.__dict__)

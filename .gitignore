@@ -1,0 +1,5 @@
+*.py[doc]
+TGT
+action/hosts
+celerybeat-schedule
+logs/*

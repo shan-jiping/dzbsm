@@ -96,4 +96,4 @@ def host_list():
     
 
 if __name__=='__main__':
-    host_list()
+    print host_list()
