@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+
+{% load staticfiles %}
+{% block custom_bread %}
+{% endblock %}
+
+
+{% block content %}
+
+
+<div alias="center">
+<h2>轮播任务</h2>
+<form action="/action/create_act" method="post" autocomplete="off"> {% csrf_token %}
+轮播文件:<input type="text" name="reboadcast_file" value="0810TFBOY2.flv"/>      流名:<input type="text" name="stream" /> <input type="hidden" name="type" value="reboadcast"> <input type="submit" value="创建轮播任务" />
+</form>
+</br>
+<h2>动态拉流任务</h2>
+<form action="/action/create_act" method="post" autocomplete="off"> {% csrf_token %}
+拉流地址:<input type="text" name="pull" />      流名:<input type="text" name="stream" />  <input type="hidden" name="type" value="act"> <input type="submit" value="创建拉流任务" />
+</form>
+</br>
+<div>
+<div alias="center">
+<table width= "96%" alias="center" >
+<tr><th valign="top">stream</th><th valign="top">task</th><th valign="top" colspan="2">info</th><th>删除任务</th></tr>
+{% for stream,i in info.items %}
+<tr>
+	<td rowspan="9" bgcolor="aqua"><strong>{{ stream }}</strong></td>
+	<td rowspan="4" bgcolor="yellow"><em>reboard_task</em></td>
+        <td bgcolor="yellow">push</td>
+	<td bgcolor="yellow">{{ i.reboard_task.push }}</td>
+        {% if i.reboard_task.push == '' %}
+        <td rowspan="4" ></td>
+        {% else %}
+        <td rowspan="4" bgcolor="yellow"><a href="/action/del_kuwo?stream={{ stream }}&type=reboardcast">轮播删除</a></td>
+        {% endif %}
+<tr/>
+<tr>
+        <td bgcolor="yellow">file</td>
+	<td bgcolor="yellow">{{ i.reboard_task.flv_file }}</td>
+</tr>
+<tr>
+        <td bgcolor="yellow">begintime</td>
+	<td bgcolor="yellow">{{ i.reboard_task.begintime }}</td>
+</tr>
+<tr>
+	<td rowspan="3" bgcolor="green"><em>live_task</em></td>
+        <td bgcolor="green">push</td>
+	<td bgcolor="green">{{ i.live_task.push }}</td>
+        {% if i.live_task.push == '' %}
+        <td rowspan="4" ></td>
+        {% else %}
+        <td rowspan="3" bgcolor="green"><a href="/action/del_kuwo?stream={{ stream }}&type=live">拉流删除</a></td>
+        {% endif %}
+</tr>
+<tr>
+        <td bgcolor="green">pull</td>
+	<td bgcolor="green">{{ i.live_task.pull }}</td>
+</tr>
+<tr>
+        <td bgcolor="green">begintime</td>
+	<td bgcolor="green">{{ i.live_task.begintime }}</td>
+</tr>
+<tr>
+        <td rowspan="2" bgcolor="red"><em>拉流地址</em> </td>
+        <td bgcolor="red">rtmp:</td>
+        <td bgcolor="red" colspan="2">rtmp://rtmp.kuwoact.fastcdn.com/kuwoact/{{ stream }}<td>
+</tr>
+<tr>
+        <td bgcolor="red">HLS:</td>
+        <td bgcolor="red" colspan="2">http://hls.kuwoact.fastcdn.com/kuwoact/{{ stream }}/index.m3u8<td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+{% endblock %}
+
+
+{% block custom_js %}
+{% endblock %}

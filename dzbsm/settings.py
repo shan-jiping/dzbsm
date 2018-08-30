@@ -239,6 +239,8 @@ from celery.schedules import crontab
 djcelery.setup_loader()
 
 BROKER_URL = 'redis://localhost:6379/2'
+#CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+#CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/2'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
