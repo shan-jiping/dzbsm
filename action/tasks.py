@@ -1,12 +1,56 @@
 import time
 from celery import task as ct
 from celery import shared_task
-from .models import task,task_result
+from .models import task,task_result,group
+from users.models import UserProfile
 from .Myansible import my_ansible,my_ansible_play
 from .get_host import host_list
+from users.email_send import send_task_result
 import logging
 import os
 
+
+
+
+@shared_task
+def play_book_crontab(hosts,play_book,email):
+    user = UserProfile.objects.get(username='crontab')
+    mytask=task()
+    mytask.create_user=user
+    mytask.status='init'
+    mytask.Type='playbook'
+    mytask.group=group.objects.get(name=hosts)
+    mytask.model=play_book
+    mytask.args=''
+    mytask.save()
+    mytask_result=task_result()
+    mytask_result.task_id=mytask
+    mytask_result.result=''
+    mytask_result.save()
+    try:
+        mytask.status='running'
+        mytask.save()
+        play_book=my_ansible_play(mytask.model,extra_vars={'hosts':mytask.group.name})
+        play_book.run()
+        fs=play_book.get_result()
+        mytask_result.result=fs
+        mytask_result.save()
+        mytask.status='done'
+        mytask.save()
+        send_task_result(email,mytask.id)
+        return fs
+    except Exception, e:
+        mytask.status='error'
+        mytask.save()
+        logging.error('+++++++++++++++++++++++++++++++++++')
+        logging.error(e)
+        send_task_result(email,mytask.id)
+        return e
+    
+    
+    
+    
+    
 
 
 @shared_task

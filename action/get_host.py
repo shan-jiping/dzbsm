@@ -9,6 +9,9 @@ def host_list():
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     ans_host_path=os.path.join(BASE_DIR, "action/hosts")
     an_groups={}
+    if os.path.getsize('/etc/ansible/cache/hosts') <= 500 :
+        return {'error':'/etc/ansible/cache/hosts filesize is to small'}
+        exit()
     if os.path.exists(ans_host_path):
         os.remove(ans_host_path)
     with open('/etc/ansible/cache/hosts','r') as json_file:

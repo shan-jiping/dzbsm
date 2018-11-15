@@ -24,6 +24,23 @@ def random_str(random_length=8):
         str += chars[random.randint(0, length)]
     return str
 
+
+
+# 发送任务结果有劲啊
+def send_task_result(email,taskid):
+    from action.models import task,task_result
+    mytask=task.objects.get(id=taskid)
+    playbook=mytask.model
+    group=mytask.group.name
+    status=mytask.status
+    result=eval(task_result.objects.get(id=mytask.id).result)
+    email_title = "dzbsm任务结果"
+    email_body = loader.render_to_string("email_result.html",{"group":group,"playbook":playbook,"status":status,"result":result})
+    msg = EmailMessage(email_title, email_body, DEFAULT_FROM_EMAIL, [email])
+    msg.content_subtype = "html"
+    send_status = msg.send()
+
+
 # 发送注册邮件
 def send_register_eamil(email, send_type="register"):
     # 发送之前先保存到数据库，到时候查询链接是否存在
@@ -44,7 +61,7 @@ def send_register_eamil(email, send_type="register"):
     # 定义邮件内容:
     email_title = ""
     email_body = ""
-    print domain
+    #print domain
     if send_type == "register":
         email_title = "dzbsm 注册激活链接"
         #email_body = "欢迎注册mtianyan的慕课小站:  请点击下面的链接激活你的账号: http://127.0.0.1:8000/active/{0}".format(code)

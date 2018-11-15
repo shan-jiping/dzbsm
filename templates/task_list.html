@@ -31,7 +31,7 @@
 	{% csrf_token %}
 </form>
 </br>
-<table id="tableSort" border="2" align="center">
+<table id="tableSort" border="2" align="center" width="60%">
 <thead><tr><th type="string">创建时间</th><th type="string">创建用户</th><th type="string">动作</th><th type="string">主机组/ip</th><th type="string">模块/playbook</th><th type="string">参数/command</th><th type="string">参数/command</th></tr></thead><tbody>
 {% for task in tasks %}
 <tr><td class="sequence" valign="top" >{{ task.create_time }}</td><td valign="top" >{{ task.create_user }}</td><td valign="top" >{{ task.Type }}</td><td valign="top" > {% if task.group_id != None %}  {{ task.group }} {% else %} {{ task.host.ip }}   {% endif %}    </td><td valign="top" >{{ task.model }}</td><td valign="top" >{{ task.args }}</td><td valign="top" > <a href="{% url 'action:mytask_result' task.id %}"> {{ task.status }}</a></td></tr>

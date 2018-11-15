@@ -1,3 +1,4 @@
+#coding:utf-8
 from __future__ import absolute_import, unicode_literals
 
 from datetime import timedelta
@@ -103,8 +104,8 @@ class IntervalSchedule(models.Model):
     )
 
     class Meta:
-        verbose_name = _('interval')
-        verbose_name_plural = _('intervals')
+        verbose_name = _('循环任务时间')
+        verbose_name_plural = _('循环任务时间')
         ordering = ['period', 'every']
 
     @property
@@ -147,8 +148,8 @@ class CrontabSchedule(models.Model):
     )
 
     class Meta:
-        verbose_name = _('crontab')
-        verbose_name_plural = _('crontabs')
+        verbose_name = _('定时任务时间')
+        verbose_name_plural = _('定时任务时间')
         ordering = ['month_of_year', 'day_of_month',
                     'day_of_week', 'hour', 'minute']
 
@@ -260,8 +261,8 @@ class PeriodicTask(models.Model):
     no_changes = False
 
     class Meta:
-        verbose_name = _('periodic task')
-        verbose_name_plural = _('periodic tasks')
+        verbose_name = _('任务列表')
+        verbose_name_plural = _('任务列表')
 
     def validate_unique(self, *args, **kwargs):
         super(PeriodicTask, self).validate_unique(*args, **kwargs)
@@ -309,8 +310,8 @@ class WorkerState(models.Model):
 
     class Meta:
         """Model meta-data."""
-        verbose_name = _('worker')
-        verbose_name_plural = _('workers')
+        verbose_name = _('任务主机')
+        verbose_name_plural = _('任务主机')
         get_latest_by = 'last_heartbeat'
         ordering = ['-last_heartbeat']
 

@@ -99,7 +99,7 @@ class get_kuwoact(View):
     def get(self,request):
         kuwo_stream=request.GET.get('stream')
         if kuwo_stream == None:
-            return HttpResponse('请输入流名    like:  http://192.168.240.13:18072/action/kuwo?stream=xxx')
+            return HttpResponse('请输入流名    like:  /action/kuwo?stream=xxx')
         else:
             url=fdl(kuwo_stream)
             return HttpResponse(url)
@@ -120,7 +120,7 @@ class create_act(View):
                 body={
                     "domain":"huanan",
                     "flv_file":"/mesos/ceph/NNOP00705/A3CGUIHJUE5K3HQYH158_live-dl-84561/live-dl-record/sjp/"+request.POST['reboadcast_file'].strip(),
-                    "push":"rtmp://121.32.254.160/pub.kuwoact.dnionzb.com/kuwoact/"+request.POST['stream'].strip()
+                    "push":"rtmp://121.32.254.160:1835/pub.kuwoact.dnionzb.com/kuwoact/"+request.POST['stream'].strip()
                }
 
             elif request.POST['type']=='act' and request.POST['stream']!='' and request.POST['pull']!='':
@@ -128,7 +128,7 @@ class create_act(View):
                 body={
                     "domain":"huanan",
                     "pull":request.POST['pull'].strip(),
-                    "push":"rtmp://121.32.254.160/pub.kuwoact.dnionzb.com/kuwoact/"+request.POST['stream'].strip()
+                    "push":"rtmp://121.32.254.160:1835/pub.kuwoact.dnionzb.com/kuwoact/"+request.POST['stream'].strip()
                }
             else:
                 task=False
@@ -178,7 +178,7 @@ class del_kuwo_act(View):
                     post_port=80
                     method="POST"
                     url='/yilan/v1/delete'
-                    push_dir='rtmp://121.32.254.160/pub.kuwoact.dnionzb.com/kuwoact/'+stream
+                    push_dir='rtmp://121.32.254.160:1835/pub.kuwoact.dnionzb.com/kuwoact/'+stream
                     body={
                        "domain":"huanan",
                        "push":push_dir,
@@ -370,7 +370,7 @@ class Mytask(View):
             elif mytask.Type == 'playbook':
                 r=pb_run.delay(mytask.id)
                 my_tasks=task.objects.filter(id=request.user.id)
-            return http.HttpResponseRedirect('http://192.168.240.13:18072/action/')
+            return http.HttpResponseRedirect('/action/')
 
 class Mytest(View):
     def get(self,request):
