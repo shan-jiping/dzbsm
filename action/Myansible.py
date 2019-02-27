@@ -16,10 +16,13 @@ from ansible.executor.task_queue_manager import TaskQueueManager
 import logging
 
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(filename)s %(process)d %(levelname)s %(message)s',
                     datefmt='%Y %m %d %H:%M:%S',
-                    filename='../logs/Myansible.log',
+                    filename='%s/logs/Myansible.log'%BASE_DIR,
                     filemode='a')
 
 class playbookcallback(CallbackBase):
@@ -183,8 +186,6 @@ class my_ansible():
         ansible_cfg = os.path.join(BASE_DIR, "action/ansible.cfg")
         if ansible_cfg != None:
             os.environ["ANSIBLE_CONFIG"] = ansible_cfg
-        #host_list = '/data/shanjiping/ans_d/ansible/hosts'
-        #ansible_cfg='/data/shanjiping/ans_d/ansible/ansible.cfg'
         self.tasks=tasks
         self.passwords=passwords
         self.groups=groups
