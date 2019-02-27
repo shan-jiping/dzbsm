@@ -1,6 +1,6 @@
 #coding:utf-8
 from __future__ import absolute_import, unicode_literals
-from .models import hosts,group,hosts_group,task,task_result,ys_uid
+from .models import hosts,group,hosts_group,task,task_result,ys_uid,task_template,ffmpeg_task
 import xadmin
 
 
@@ -19,7 +19,10 @@ class task_resultAdmin(object):
 class ys_uidAdmin(object):
     list_display = ['uid','host','status']
     search_fields = ['uid','status','host__ip']
-
+class task_templateAdmin(object):
+    list_display = ['name','template']
+class ffmpeg_taskAdmin(object):
+    list_display = ['source','template','create_user','start_time','end_time','status']
 
 xadmin.site.register(hosts, hostsAdmin)
 xadmin.site.register(group, groupAdmin)
@@ -27,3 +30,5 @@ xadmin.site.register(hosts_group, hosts_groupAdmin)
 xadmin.site.register(task,taskAdmin)
 xadmin.site.register(task_result,task_resultAdmin)
 xadmin.site.register(ys_uid,ys_uidAdmin)
+xadmin.site.register(task_template,task_templateAdmin)
+xadmin.site.register(ffmpeg_task,ffmpeg_taskAdmin)

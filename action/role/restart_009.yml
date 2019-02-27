@@ -1,0 +1,5 @@
+---
+- hosts: '{{ hosts }}'
+  tasks:
+  - name: restart nginx
+    command: sh /usr/local/src/Nginx_restart.sh

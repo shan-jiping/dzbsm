@@ -34,10 +34,10 @@ class RegisterView(View):
         if register_form.is_valid():
             # 这里注册时前端的name为email
             user_name = request.POST.get("email", "")
-            if '@dnion.com' not in user_name:
+            if '@fastcdn.com' not in user_name:
                 return render(
                     request, "register.html", {
-                        "register_form": register_form, "msg": "请用dnion.com 邮箱注册"})
+                        "register_form": register_form, "msg": "请用fastcdn.com 邮箱注册"})
             if UserProfile.objects.filter(email=user_name):
                 return render(
                     request, "register.html", {

@@ -155,10 +155,10 @@ class my_ansible_play():
             self.result_all['success'][host] = result._result
 
         for host, result in self.results_callback.host_failed.items():
-            self.result_all['fail'][host] = result._result['msg']
+            self.result_all['fail'][host] = result._result
 
         for host, result in self.results_callback.host_unreachable.items():
-            self.result_all['unreachable'][host]= result._result['msg']
+            self.result_all['unreachable'][host]= result._result
         
         #for i in self.result_all['success'].keys():
         #    print i,self.result_all['success'][i]

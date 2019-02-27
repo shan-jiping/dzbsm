@@ -192,16 +192,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "smtp.dnion.com"
+EMAIL_HOST = "smtp.mxhichina.com"
 EMAIL_PORT = 25
-EMAIL_HOST_USER = "shanjiping"
+EMAIL_HOST_USER = "shanjiping@fastcdn.com"
 EMAIL_HOST_PASSWORD = "wojiushiSjp505"
 #EMAIL_USE_TLS= True
-DEFAULT_FROM_EMAIL = "shanjiping@dnion.com"
+DEFAULT_FROM_EMAIL = "shanjiping@fastcdn.com"
 
 
 
-domain='192.168.240.13:18072'
+domain='10.182.0.13:18072'
 
 
 # loging
@@ -239,9 +239,9 @@ from celery.schedules import crontab
 djcelery.setup_loader()
 
 BROKER_URL = 'redis://localhost:6379/2'
-#CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-#CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/2'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+#CELERY_RESULT_BACKEND = 'redis://localhost:6379/2'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -250,13 +250,6 @@ CELERY_TIMEZONE = 'Asia/Shanghai'
 from datetime import timedelta
 
 
-CELERYBEAT_SCHEDULE = {
-    'add-every-3-seconds': {
-        'task': 'action.tasks.update_hosts',
-        'schedule': crontab(minute=u'55', hour=u'*/4',),
-        #'schedule': timedelta(seconds=30)
-    },
-}
 
 #ansible
 ansible_cfg = os.path.join(BASE_DIR, "action/ansible.cfg")

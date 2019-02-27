@@ -19,6 +19,7 @@ import random
 import datetime
 import httplib
 from email.utils import formatdate
+from users.models import UserProfile
 # Create your views here.
 
 
@@ -233,6 +234,11 @@ class kuwo_act(View):
 
         if result['code']==0:
             info={}
+            kuwo_key='kuwo2013rtmp'
+            opstr='listen'
+            uid='44754776'
+            roomid='1000'
+            now=int(time.time())
             for i in result['tasks']['reboard_tasks']:
                 stream=i['push'].split('kuwoact/')[1]
                 info[stream]={
@@ -241,7 +247,8 @@ class kuwo_act(View):
                                                      'flv_file':i['flv_file'],
                                                      'begintime':i['begintime']
                                                  },
-                                 'live_task':{
+                                  'rtmp_fdl':'?opstr='+opstr+'&tm='+str(now)+'&uid='+uid+'&roomid='+roomid+'&Md5='+tomd5(opstr+str(now)+uid+roomid+kuwo_key),
+                                  'live_task':{
                                               'push':'',
                                               'pull':'',
                                               'begintime':''
@@ -262,7 +269,8 @@ class kuwo_act(View):
                                                      'flv_file':'',
                                                      'begintime':''
                                                  },
-                                 'live_task':{          
+                                  'rtmp_fdl':'?opstr='+opstr+'&tm='+str(now)+'&uid='+uid+'&roomid='+roomid+'&Md5='+tomd5(opstr+str(now)+uid+roomid+kuwo_key),
+                                  'live_task':{          
                                               'push':j['push'],
                                               'pull':j['pull'],
                                               'begintime':j['begintime']
@@ -371,6 +379,21 @@ class Mytask(View):
                 r=pb_run.delay(mytask.id)
                 my_tasks=task.objects.filter(id=request.user.id)
             return http.HttpResponseRedirect('/action/')
+
+class Cronttask(View):
+    def get(self,request):
+        if not request.user.is_authenticated():
+            return http.HttpResponseRedirect('/users/login')
+        else:
+            logger = logging.getLogger("django")
+            user=UserProfile.objects.get(username='crontab')
+            my_tasks=task.objects.filter(create_user=user).order_by("-create_time")
+            logger.info(str(my_tasks.__dict__))
+            groups_list=[]
+            for i in group.objects.filter():
+                groups_list.append(i.name)
+            groups_list.sort()
+            return render(request,'crontab_list.html',{"tasks":my_tasks,"groups":groups_list})
 
 class Mytest(View):
     def get(self,request):

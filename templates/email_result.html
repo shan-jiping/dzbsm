@@ -1,0 +1,16 @@
+<h1>主机组: {{group}}</h1>
+<h2>playbook：{{playbook}} </h2>
+<h3>任务状态：{{status}}</h3>
+<h3>结果</h3>
+
+<table border="1" width="96%" alias="center" cellspacing="0" >
+{% for ip,s in result.success.items  %}
+<tr><td valign="top" width="10%" bgcolor="green" >success</td> <td valign="top" width="15%"> {{ ip }}</td><td valign="top" > {% for l in s.stdout_lines %}  {{l}}</br>  {% endfor %}</td></tr>
+{% endfor %}
+{% for ipf,f in result.fail.items  %}
+<tr><td valign="top" width="10%" bgcolor="red" >fail</td> <td valign="top" width="15%" > {{ ipf }}</td><td valign="top" > {{ f.stderr }}</td></tr>
+{% endfor %}
+{% for ipu,u in result.unreachable.items  %}
+<tr><td valign="top" width="10%" bgcolor="red" >unreachable</td> <td valign="top" width="15%" > {{ ipu }}</td><td valign="top" > {{ u.msg }}</td></tr>
+{% endfor %}
+</table>

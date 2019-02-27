@@ -5,7 +5,8 @@ from .models import task,task_result,group
 from users.models import UserProfile
 from .Myansible import my_ansible,my_ansible_play
 from .get_host import host_list
-from users.email_send import send_task_result
+from users.email_send import send_task_result,send_task_faild
+from ffmpy import FFmpeg
 import logging
 import os
 
@@ -33,7 +34,7 @@ def play_book_crontab(hosts,play_book,email):
         play_book=my_ansible_play(mytask.model,extra_vars={'hosts':mytask.group.name})
         play_book.run()
         fs=play_book.get_result()
-        mytask_result.result=fs
+        mytask_result.result=str(fs)
         mytask_result.save()
         mytask.status='done'
         mytask.save()
@@ -44,16 +45,33 @@ def play_book_crontab(hosts,play_book,email):
         mytask.save()
         logging.error('+++++++++++++++++++++++++++++++++++')
         logging.error(e)
-        send_task_result(email,mytask.id)
+        logging.error(str(fs))
+        send_task_faild('shanjiping@fastcdn.com',mytask.id)
         return e
     
     
     
     
-    
+@shared_task(bind=True) 
+def ffmpy_test(self,task_info):
+    logging.info(self.request.id)
+    t=FFmpeg(
+        executable=task_info['executable'],
+        global_options=task_info['global_options'],
+        inputs=task_info['inputs'],
+        outputs=task_info['outputs'],
+        logfile='task_log/'+str(self.request.id)
+    )
+    while True:
+        logging.info(t.cmd)
+        try:
+            t.run()
+        except Exception, e:
+            logging.error('+++++++++++++++++++++++++++++++++++')
+            logging.error(e)
 
 
-@shared_task
+@shared_task()
 def update_hosts():
     logger = logging.getLogger("django")
     logger.info('update host list')

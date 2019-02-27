@@ -39,6 +39,19 @@ def send_task_result(email,taskid):
     msg = EmailMessage(email_title, email_body, DEFAULT_FROM_EMAIL, [email])
     msg.content_subtype = "html"
     send_status = msg.send()
+# 
+def send_task_faild(email,taskid):
+    from action.models import task,task_result
+    mytask=task.objects.get(id=taskid)
+    playbook=mytask.model
+    group=mytask.group.name
+    status=mytask.status
+    time=mytask.create_time
+    email_title = "dzbsm任务失败"
+    email_body = loader.render_to_string("email_error.html",{"group":group,"playbook":playbook,"status":status,"time":time})
+    msg = EmailMessage(email_title, email_body, DEFAULT_FROM_EMAIL, [email])
+    msg.content_subtype = "html"
+    send_status = msg.send()
 
 
 # 发送注册邮件
