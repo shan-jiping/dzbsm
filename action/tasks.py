@@ -1,12 +1,13 @@
 import time
 from celery import task as ct
 from celery import shared_task
-from .models import task,task_result,group
+from .models import task,task_result,group,short_task,short_task_template
 from users.models import UserProfile
 from .Myansible import my_ansible,my_ansible_play
 from .get_host import host_list
 from users.email_send import send_task_result,send_task_faild
 from ffmpy import FFmpeg
+from action.ShortTask import ShortTask
 import logging
 import os
 
@@ -69,6 +70,32 @@ def ffmpy_test(self,task_info):
         except Exception, e:
             logging.error('+++++++++++++++++++++++++++++++++++')
             logging.error(e)
+
+@shared_task(bind=True)
+def short_task_run(self,task_id):
+    task=short_task.objects.get(id=task_id)
+    task.celery_task_id=self.request.id
+    task.log='task_log/'+str(self.request.id)
+    task.save()
+    tem=short_task_template.objects.get(id=task.template_id)
+    template_type=tem.type
+    ct=ShortTask(task_id)
+    if template_type=='nokill':
+        print 'nokill task'
+        while True:
+            try:
+                ct.run()
+            except Exception, e:
+                print e
+    elif template_type=='defalt':
+        ct=ShortTask(task_id)
+        logging.info('start ShotTask:'+str(task_id)+' command:'+task.command)
+        try:
+            ct.run()
+        except Exception, e:
+            print e    
+
+
 
 
 @shared_task()
@@ -142,14 +169,3 @@ def pb_run(id):
         logging.error(e)
         return e
 
-@shared_task
-def test_run():
-    logger = logging.getLogger("django")
-    mytask=task.objects.get(id=103)
-    tasks = [ dict(action=dict(module=mytask.model, args=dict(cmd=mytask.args)))]
-    ans=my_ansible(tasks,'36.102.216.90')
-    ans.run()
-    fs=ans.get_result()
-    print ans.__dict__
-    logging.info(fs)
-    

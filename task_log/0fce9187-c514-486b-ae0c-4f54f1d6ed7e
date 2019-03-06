@@ -1,0 +1,12 @@
+ffmpeg version N-88681-gdd435c957a-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2017 the FFmpeg developers
+  built with gcc 6.4.0 (Debian 6.4.0-9) 20171026
+  configuration: --enable-gpl --enable-version3 --enable-static --disable-debug --disable-ffplay --disable-indev=sndio --disable-outdev=sndio --cc=gcc-6 --enable-fontconfig --enable-frei0r --enable-gnutls --enable-gray --enable-libfribidi --enable-libass --enable-libvmaf --enable-libfreetype --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-librubberband --enable-librtmp --enable-libsoxr --enable-libspeex --enable-libvorbis --enable-libopus --enable-libtheora --enable-libvidstab --enable-libvo-amrwbenc --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxvid --enable-libzimg
+  libavutil      56.  0.100 / 56.  0.100
+  libavcodec     58.  1.100 / 58.  1.100
+  libavformat    58.  2.100 / 58.  2.100
+  libavdevice    58.  0.100 / 58.  0.100
+  libavfilter     7.  0.101 /  7.  0.101
+  libswscale      5.  0.101 /  5.  0.101
+  libswresample   3.  0.101 /  3.  0.101
+  libpostproc    55.  0.100 / 55.  0.100
+'rtmp://58.216.12.131:1838/kuwoact/test': No such file or directory

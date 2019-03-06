@@ -2,11 +2,12 @@
 from django import http
 from django.shortcuts import render
 from django.views.generic.base import View
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from .get_host import host_list
 from .Myansible import my_ansible,my_ansible_play
-from .models import task,task_result,group,hosts,ys_uid,hosts_group
-from django.http import HttpResponse
-from .tasks import task_run,test_run,pb_run
+from .models import task,task_result,group,hosts,ys_uid,hosts_group,short_task_template,short_task
+from .tasks import task_run,pb_run,short_task_run
 import logging
 import redis
 import os
@@ -343,7 +344,7 @@ class Mytask(View):
             return http.HttpResponseRedirect('/users/login')
         else:
             logger = logging.getLogger("django")
-            user=user=request.user
+            user=request.user
             my_tasks=task.objects.filter(create_user=request.user).order_by("-create_time")
             logger.info(str(my_tasks.__dict__))
             groups_list=[]
@@ -357,7 +358,7 @@ class Mytask(View):
             return http.HttpResponseRedirect('/users/login')
         else:
             mytask=task()
-            mytask.create_user=user=request.user
+            mytask.create_user=request.user
             mytask.status='init'
             mytask.Type=request.POST['Type']
             mytask.group=group.objects.get(name=request.POST['group'])
@@ -395,11 +396,6 @@ class Cronttask(View):
             groups_list.sort()
             return render(request,'crontab_list.html',{"tasks":my_tasks,"groups":groups_list})
 
-class Mytest(View):
-    def get(self,request):
-        test_run.delay()
-        my_tasks=task.objects.filter(id=103)
-        return HttpResponse(my_tasks)
 class mytask_result(View):
     def get(self,request,active_code):
         if not request.user.is_authenticated():
@@ -410,13 +406,49 @@ class mytask_result(View):
                 return HttpResponse('结果未出来，请稍后再看，如很久没有结果请检查服务')
             else:
                 return render(request,'result.html',{"info":eval(result.result)})
+
+
+
+
+@login_required
+class create_short_task(View):
+    def post(self,request):
+        post_data=request.POST
+        if short_task_template.objects.filter(name=short_task_template).exists():
+            short_task_template=post_data['short_task_template']
+            tem=short_task_template.objects.get(name=short_task_template)
+            rule=eval(tem.template)
+            para=True
+            for i in rule['must_parameters']:
+                if i not in post_data:
+                    para=False
+            if para:
+                task=short_task()
+                user=request.user
+                task.source=post_data
+                task.template=tem
+                task.create_user=user
+                task.status='running'
+                task.save() 
+                short_task_run.delay(task.id)
+                return HttpResponse('任务短创建成功')
+            else:
+                return HttpResponse('lost args')
+        else:
+            return HttpResponse('模版名错误，请确认')
+
+
+
+
+
+
 class init2101(View):
     def get(self,request):
         if not request.user.is_authenticated():
             return http.HttpResponseRedirect('/users/login')
         else:
             logger = logging.getLogger("django")
-            user=user=request.user
+            user=request.user
             my_tasks=task.objects.filter(create_user=request.user)
             logger.info(str(my_tasks.__dict__))
             groups_list=[]
@@ -436,7 +468,7 @@ class init2101(View):
         for ip in request.POST['ip'].split(','):
             if ip in groups_list:
                 mytask=task()
-                mytask.create_user=user=request.user
+                mytask.create_user=request.user
                 mytask.status='init'
                 mytask.Type='ansible'
                 mytask.model='shell'

@@ -44,32 +44,36 @@ class hosts_group(models.Model):
         verbose_name = u"主机组关系"
         verbose_name_plural = verbose_name
 
-class task_template(models.Model):
-    name=models.CharField(max_length=50, verbose_name=u"模版名")
-    template=models.TextField(null=True, blank=True,verbose_name="模版")
+class short_task_template(models.Model):
+    name=models.CharField(max_length=50, verbose_name=u"短任务模版名",unique=True)
+    type=models.CharField(max_length=10, verbose_name=u"短任务模版类型",null=True,default='default')
+    template=models.TextField(null=True, blank=True,verbose_name="短任务模版")
     class Meta:
-        verbose_name = u"任务模版"
+        verbose_name = u"短任务模版"
         verbose_name_plural = verbose_name
     def __unicode__(self):
         return self.name
 
-class ffmpeg_task(models.Model):
+class short_task(models.Model):
     status_CHOICES=(
         ("running","进行中"),
         ("done","已结束")
     )
-    task=models.CharField(max_length=50, verbose_name=u"celery_task_id",null=True, blank=True)
+    celery_task_id=models.CharField(max_length=50, verbose_name=u"celery_task_id",null=True, blank=True)
     source=models.TextField(null=True, blank=True,verbose_name="源数据")
-    template=models.ForeignKey(task_template, verbose_name=u"模版", null=True, blank=True)
+    template=models.ForeignKey(short_task_template, verbose_name=u"模版", null=True, blank=True)
     create_user=models.ForeignKey(UserProfile, verbose_name=u"创建用户", null=True, blank=True)
     start_time=models.DateTimeField(default=datetime.now, verbose_name=u"开始时间")
-    end_time=models.DateTimeField(default=datetime.now, verbose_name=u"结束时间",null=True)
+    end_time=models.DateTimeField(default=datetime.now,verbose_name=u"结束时间",null=False)
     status=models.CharField(choices=status_CHOICES, max_length=15, verbose_name=u"状态")
+    log=models.CharField(max_length=50, verbose_name=u"任务日志",null=True, blank=True)
+    result=models.CharField(max_length=50, verbose_name=u"任务结果",null=True, blank=True)
+    command=models.CharField(max_length=1000, verbose_name=u"运行命令",null=True, blank=True)
     class Meta:
-        verbose_name = u"FFmpeg任务"
+        verbose_name = u"短任务任务"
         verbose_name_plural = verbose_name
     def __unicode__(self):
-        return self.task
+        return self.celery_task_id
 
 class task(models.Model):
     action_CHOICES=(
