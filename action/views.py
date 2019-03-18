@@ -230,7 +230,6 @@ class kuwo_act(View):
             result = json.loads(response.read())
         except Exception, e:
             print 'ERROR: ' + str(e)
-            print 'content:',content
         http_client.close()
 
         if result['code']==0:
@@ -410,13 +409,15 @@ class mytask_result(View):
 
 
 
-@login_required
 class create_short_task(View):
     def post(self,request):
-        post_data=request.POST
-        if short_task_template.objects.filter(name=short_task_template).exists():
-            short_task_template=post_data['short_task_template']
-            tem=short_task_template.objects.get(name=short_task_template)
+        post_data={}
+        for i in request.POST:
+            post_data[i]=request.POST[i]
+        del post_data['csrfmiddlewaretoken']
+        print post_data 
+        if short_task_template.objects.filter(name=post_data['template']).exists():
+            tem=short_task_template.objects.get(name=post_data['template'])
             rule=eval(tem.template)
             para=True
             for i in rule['must_parameters']:

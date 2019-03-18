@@ -1,6 +1,6 @@
 #coding:utf-8
 from django.conf.urls import url
-from action.views import Update_host,task_test,Mytask,mytask_result,init2101,get_kuwoact,kuwo_act,del_kuwo_act,create_act,Cronttask
+from action.views import Update_host,task_test,Mytask,mytask_result,init2101,get_kuwoact,kuwo_act,del_kuwo_act,create_act,Cronttask,create_short_task
 
 
 urlpatterns = [
@@ -13,5 +13,6 @@ urlpatterns = [
     url('^kuwo_act',kuwo_act.as_view(),name="kuwo_act"),
     url('^create_act',create_act.as_view(),name="create_act"),
     url('^crontab',Cronttask.as_view(),name="cront_task"),
+    url('^short_task',create_short_task.as_view(),name="short_task"),
     url('^kuwo',get_kuwoact.as_view(),name="kuwo_act_fdl")
 ]

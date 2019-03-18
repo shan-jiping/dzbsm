@@ -13,3 +13,4 @@ django-crispy-forms==1.7.2
 django-formtools==2.1
 anyjson==0.3.3
 ansible==2.2.1.0
+supervisor

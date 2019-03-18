@@ -1,3 +1,5 @@
+#coding:utf-8
+
 import errno
 import shlex
 import subprocess
@@ -6,6 +8,9 @@ import re
 import os
 import time
 import signal
+import chardet
+
+
 
 def CloseTask(id):
     from celery.task.control import revoke
@@ -58,12 +63,20 @@ class ShortTask(object):
 
     def run(self, input_data=None, stdout=None, stderr=None):
         try:
-            f=open(self.logfile,'a')
+            #print self._cmd
+            #self._cmd=self._cmd.append('>>'+self.logfile)
+            #f=open(self.logfile,'a')
+            for i in self._cmd:
+                adchar=chardet.detect(i)
+                print i,type(i),adchar
             self.process = subprocess.Popen(
                 self._cmd,
+                #self.cmd,
                 stdin=subprocess.PIPE,
-                stdout=f.fileno(),
-                stderr=f.fileno()
+                #stdout=f.fileno(),
+                #stderr=f.fileno()
+                stdout=stdout,
+                stderr=stderr
             )
         except OSError as e:
             if e.errno == errno.ENOENT:
@@ -112,7 +125,7 @@ def _merge_args_opts(template,source):
             seq=int(arg.split('[')[1].split(']')[0])
             pattern = re.compile(r'\{\* .+ \*\}')
             s=re.sub(pattern,source[template[d][seq]],s)
-            merged.append(s)
+            merged.append(s.encode(encoding='utf-8'))
         else:
-            merged.append(s)
+            merged.append(s.encode(encoding='utf-8'))
     return merged
