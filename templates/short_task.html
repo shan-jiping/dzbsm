@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+
+{% load staticfiles %}
+{% block custom_bread %}
+{% endblock %}
+
+
+{% block content %}
+
+
+<div alias="center">
+</br>
+<h2>轮播任务</h2>
+<form action="/action/create_short_task" method="post" autocomplete="off" id="flvlist"> {% csrf_token %}
+轮播文件:
+<select name="filename" form="flvlist"> 
+{% for flv in flv_list %}
+<option value="{{ flv }}">{{ flv }}</option>
+{% endfor %}
+</select> 
+流名:<input type="text" name="stream" />
+<input type="hidden" name="template" value="kuwo-lunbo"> <input type="submit" value="创建轮播任务" />
+</form>
+</br>
+</br>
+<h2>动态拉流任务</h2>
+<form action="/action/create_short_task" method="post" autocomplete="off"> {% csrf_token %}
+拉流地址:<input type="text" name="input" />      流名:<input type="text" name="stream" value="125380647" />  <input type="hidden" name="template" value="kuwo-tuiliu"> <input type="submit" value="创建拉流任务" />
+</form>
+</br>
+</br>
+<h2>酷我垫片转码</h2>
+<form action="/action/upload_dianpian" method="post" autocomplete="off" enctype="multipart/form-data" > {% csrf_token %}
+选择垫片文件:<input type="file" name="dianpan" /> <input type="hidden" name="template" value="kuwo-dianpian"> <input type="submit" value="上传垫片" />
+</form>
+</br>
+</br>
+
+
+{% for zm in zhuanma_list %}
+<p>{{ zm }} is running<p>
+{% endfor %}
+
+
+
+<div>
+<div alias="center">
+<table width= "96%" alias="center" >
+<tr><th valign="top">stream</th><th valign="top">task</th><th valign="top" colspan="2" width= "80%">info</th><th>删除任务</th></tr>
+{% for stream,i in info.items %}
+<tr>
+	<td rowspan="9" bgcolor="aqua"><strong>{{ stream }}</strong></td>
+	<td rowspan="4" bgcolor="yellow"><em>reboard_task</em></td>
+        <td bgcolor="yellow" height="45px">执行命令</td>
+	<td bgcolor="yellow" height="45px">{{ i.reboard_task.command }}</td>
+        {% if i.reboard_task.task_id == '' %}
+        <td rowspan="4" bgcolor="yellow"></td>
+        {% else %}
+        <td rowspan="4" bgcolor="yellow"><a href="/action/stop_short_task?id={{ i.reboard_task.task_id }}&type=reboardcast">轮播删除</a>  <a href="/action/{{ i.reboard_task.log }}">查看日志</a> </td>
+        {% endif %}
+<tr/>
+<tr>
+        <td bgcolor="yellow">file</td>
+	<td bgcolor="yellow">{{ i.reboard_task.flv_file }}</td>
+</tr>
+<tr>
+        <td bgcolor="yellow">begintime</td>
+	<td bgcolor="yellow">{{ i.reboard_task.begintime }}</td>
+</tr>
+<tr>
+	<td rowspan="3" bgcolor="green"><em>live_task</em></td>
+        <td bgcolor="green" height="45px">执行命令</td>
+	<td bgcolor="green" height="45px">{{ i.live_task.command }}</td>
+        {% if i.live_task.task_id == '' %}
+        <td rowspan="4" bgcolor="green"></td>
+        {% else %}
+        <td rowspan="3" bgcolor="green"><a href="/action/stop_short_task?id={{ i.live_task.task_id }}&type=live">拉流删除</a>  <a href="/action/{{ i.live_task.log }}">查看日志</a>  </td>
+        {% endif %}
+</tr>
+<tr>
+        <td bgcolor="green">pull</td>
+	<td bgcolor="green">{{ i.live_task.pull }}</td>
+</tr>
+<tr>
+        <td bgcolor="green">begintime</td>
+	<td bgcolor="green">{{ i.live_task.begintime }}</td>
+</tr>
+<tr>
+        <td rowspan="2" bgcolor="red"><em>拉流地址</em> </td>
+        <td bgcolor="red">rtmp:</td>
+        <td bgcolor="red" colspan="2">rtmp://rtmp.kuwoact.fastcdn.com/kuwoact/{{ stream }}{{i.rtmp_fdl}}<td>
+</tr>
+<tr>
+        <td bgcolor="red">HLS:</td>
+        <td bgcolor="red" colspan="2">http://hls.kuwoact.fastcdn.com/kuwoact/{{ stream }}/index.m3u8<td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+{% endblock %}
+
+
+{% block custom_js %}
+{% endblock %}

@@ -1,65 +1,0 @@
-ffmpeg version N-88681-gdd435c957a-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2017 the FFmpeg developers
-  built with gcc 6.4.0 (Debian 6.4.0-9) 20171026
-  configuration: --enable-gpl --enable-version3 --enable-static --disable-debug --disable-ffplay --disable-indev=sndio --disable-outdev=sndio --cc=gcc-6 --enable-fontconfig --enable-frei0r --enable-gnutls --enable-gray --enable-libfribidi --enable-libass --enable-libvmaf --enable-libfreetype --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-librubberband --enable-librtmp --enable-libsoxr --enable-libspeex --enable-libvorbis --enable-libopus --enable-libtheora --enable-libvidstab --enable-libvo-amrwbenc --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxvid --enable-libzimg
-  libavutil      56.  0.100 / 56.  0.100
-  libavcodec     58.  1.100 / 58.  1.100
-  libavformat    58.  2.100 / 58.  2.100
-  libavdevice    58.  0.100 / 58.  0.100
-  libavfilter     7.  0.101 /  7.  0.101
-  libswscale      5.  0.101 /  5.  0.101
-  libswresample   3.  0.101 /  3.  0.101
-  libpostproc    55.  0.100 / 55.  0.100
-Metadata:
-  duration              0.00
-  width                 1280.00
-  height                720.00
-  videodatarate         1465.00
-  framerate             25.00
-  videocodecid          avc1
-  audiodatarate         125.00
-  audiosamplerate       44100.00
-  audiosamplesize       16.00
-  stereo                TRUE
-  audiocodecid          mp4a
-  description           Packed by Bilibili XCoder (Bilibili XCode Worker v4.1.3)(fixed_gap:False)
-  metadatacreator       Yet Another Metadata Injector for FLV - Version 1.9
-  canSeekToEnd          true
-  videosize             82279532
-  audiosize             5798751
-  lastkeyframetimestamp 357
-  lastkeyframelocation  88175359
-  encoder               Lavf57.71.100
-  filesize              0.00
-Input #0, flv, from 'rtmp://58.216.12.131:1838/kuwoact/test':
-  Metadata:
-    description     : Packed by Bilibili XCoder (Bilibili XCode Worker v4.1.3)(fixed_gap:False)
-    metadatacreator : Yet Another Metadata Injector for FLV - Version 1.9
-    canSeekToEnd    : true
-    videosize       : 82279532
-    audiosize       : 5798751
-    lastkeyframetimestamp: 357
-    lastkeyframelocation: 88175359
-    encoder         : Lavf57.71.100
-  Duration: 00:00:00.00, start: 5845.760000, bitrate: N/A
-    Stream #0:0: Subtitle: text
-    Stream #0:1: Video: h264 (Constrained Baseline), yuv420p(progressive), 1280x720 [SAR 1:1 DAR 16:9], 1500 kb/s, 25 fps, 25 tbr, 1k tbn, 50 tbc
-    Stream #0:2: Audio: aac (LC), 44100 Hz, stereo, fltp, 128 kb/s
-Stream mapping:
-  Stream #0:1 -> #0:0 (copy)
-  Stream #0:2 -> #0:1 (aac (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, flv, to 'rtmp://121.32.254.160/pub.kuwoact.dnionzb.com/voice/test_sjp':
-  Metadata:
-    description     : Packed by Bilibili XCoder (Bilibili XCode Worker v4.1.3)(fixed_gap:False)
-    metadatacreator : Yet Another Metadata Injector for FLV - Version 1.9
-    canSeekToEnd    : true
-    videosize       : 82279532
-    audiosize       : 5798751
-    lastkeyframetimestamp: 357
-    lastkeyframelocation: 88175359
-    encoder         : Lavf58.2.100
-    Stream #0:0: Video: h264 (Constrained Baseline) ([7][0][0][0] / 0x0007), yuv420p(progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 1500 kb/s, 25 fps, 25 tbr, 1k tbn, 1k tbc
-    Stream #0:1: Audio: aac (LC) ([10][0][0][0] / 0x000A), 44100 Hz, stereo, fltp, 128 kb/s
-    Metadata:
-      encoder         : Lavc58.1.100 aac
-frame=   37 fps=0.0 q=-1.0 size=     532kB time=00:00:01.52 bitrate=2867.9kbits/s speed=2.92x    frame=   74 fps= 65 q=-1.0 size=    1264kB time=00:00:03.08 bitrate=3361.9kbits/s speed=2.69x    frame=  109 fps= 66 q=-1.0 size=    2017kB time=00:00:04.52 bitrate=3655.2kbits/s speed=2.73x    frame=  129 fps= 60 q=-1.0 size=    2497kB time=00:00:05.36 bitrate=3815.1kbits/s speed=2.48x    frame=  154 fps= 58 q=-1.0 size=    3095kB time=00:00:09.72 bitrate=2607.8kbits/s speed=3.64x    frame=  185 fps= 58 q=-1.0 size=    3751kB time=00:00:11.00 bitrate=2793.5kbits/s speed=3.46x    frame=  214 fps= 58 q=-1.0 size=    4364kB time=00:00:12.20 bitrate=2930.3kbits/s speed=3.31x    frame=  232 fps= 55 q=-1.0 size=    4780kB time=00:00:12.96 bitrate=3021.2kbits/s speed=3.09x    frame=  250 fps= 53 q=-1.0 size=    5185kB time=00:00:13.72 bitrate=3095.1kbits/s speed=2.93x    frame=  277 fps= 53 q=-1.0 size=    5810kB time=00:00:14.84 bitrate=3207.1kbits/s speed=2.85x    frame=  289 fps= 50 q=-1.0 size=    6046kB time=00:00:15.37 bitrate=3222.2kbits/s speed=2.67x    frame=  301 fps= 48 q=-1.0 size=    6366kB time=00:00:15.84 bitrate=3292.2kbits/s speed= 2.5x    frame=  318 fps= 47 q=-1.0 size=    6709kB time=00:00:16.56 bitrate=3318.8kbits/s speed=2.42x    frame=  329 fps= 45 q=-1.0 size=    6943kB time=00:00:17.00 bitrate=3345.3kbits/s speed=2.31x    frame=  342 fps= 43 q=-1.0 size=    7171kB time=00:00:17.56 bitrate=3345.1kbits/s speed=2.22x    frame=  354 fps= 42 q=-1.0 size=    7413kB time=00:00:18.04 bitrate=3365.8kbits/s speed=2.15x    frame=  367 fps= 41 q=-1.0 size=    7646kB time=00:00:18.60 bitrate=3367.1kbits/s speed=2.08x    frame=  380 fps= 40 q=-1.0 size=    7987kB time=00:00:19.12 bitrate=3421.9kbits/s speed=2.02x    frame=  389 fps= 39 q=-1.0 size=    8200kB time=00:00:19.52 bitrate=3441.1kbits/s speed=1.96x    frame=  402 fps= 38 q=-1.0 size=    8494kB time=00:00:20.04 bitrate=3472.1kbits/s speed= 1.9x    frame=  416 fps= 38 q=-1.0 size=    8820kB time=00:00:20.64 bitrate=3500.3kbits/s speed=1.86x    frame=  429 fps= 37 q=-1.0 size=    9077kB time=00:00:21.20 bitrate=3507.4kbits/s speed=1.81x    frame=  446 fps= 36 q=-1.0 size=    9415kB time=00:00:21.88 bitrate=3525.0kbits/s speed=1.78x    frame=  460 fps= 36 q=-1.0 size=    9739kB time=00:00:22.48 bitrate=3548.9kbits/s speed=1.76x    frame=  472 fps= 35 q=-1.0 size=    9973kB time=00:00:22.96 bitrate=3557.7kbits/s speed=1.73x    frame=  484 fps= 35 q=-1.0 size=   10236kB time=00:00:23.48 bitrate=3571.1kbits/s speed= 1.7x    frame=  496 fps= 35 q=-1.0 size=   10441kB time=00:00:23.96 bitrate=3569.7kbits/s speed=1.67x    frame=  510 fps= 34 q=-1.0 size=   10786kB time=00:00:24.56 bitrate=3597.5kbits/s speed=1.66x    frame=  521 fps= 34 q=-1.0 size=   10968kB time=00:00:25.00 bitrate=3593.8kbits/s speed=1.62x    frame=  535 fps= 34 q=-1.0 size=   11315kB time=00:00:25.61 bitrate=3619.2kbits/s speed=1.61x    frame=  547 fps= 33 q=-1.0 size=   11510kB time=00:00:26.12 bitrate=3609.5kbits/s speed=1.59x    frame=  560 fps= 33 q=-1.0 size=   11689kB time=00:00:26.64 bitrate=3594.4kbits/s speed=1.57x    frame=  572 fps= 33 q=-1.0 size=   11841kB time=00:00:27.16 bitrate=3570.4kbits/s speed=1.56x    frame=  584 fps= 32 q=-1.0 size=   11995kB time=00:00:27.65 bitrate=3553.0kbits/s speed=1.54x    frame=  597 fps= 32 q=-1.0 size=   12214kB time=00:00:28.20 bitrate=3548.1kbits/s speed=1.52x    frame=  609 fps= 32 q=-1.0 size=   12380kB time=00:00:28.68 bitrate=3535.9kbits/s speed=1.51x    frame=  623 fps= 32 q=-1.0 size=   12539kB time=00:00:29.28 bitrate=3507.9kbits/s speed= 1.5x    frame=  634 fps= 32 q=-1.0 size=   12705kB time=00:00:29.72 bitrate=3502.0kbits/s speed=1.48x    frame=  646 fps= 31 q=-1.0 size=   12881kB time=00:00:30.24 bitrate=3489.4kbits/s speed=1.47x    frame=  656 fps= 31 q=-1.0 size=   13018kB time=00:00:30.64 bitrate=3480.3kbits/s speed=1.44x    frame=  675 fps= 31 q=-1.0 size=   13320kB time=00:00:31.44 bitrate=3470.5kbits/s speed=1.44x    frame=  688 fps= 31 q=-1.0 size=   13476kB time=00:00:32.00 bitrate=3449.8kbits/s speed=1.44x    frame=  701 fps= 31 q=-1.0 size=   13683kB time=00:00:32.52 bitrate=3446.8kbits/s speed=1.43x    frame=  713 fps= 31 q=-1.0 size=   13851kB time=00:00:33.04 bitrate=3434.3kbits/s speed=1.42x    frame=  724 fps= 30 q=-1.0 size=   14074kB time=00:00:33.48 bitrate=3443.1kbits/s speed= 1.4x    frame=  737 fps= 30 q=-1.0 size=   14249kB time=00:00:34.04 bitrate=3428.9kbits/s speed= 1.4x    frame=  749 fps= 30 q=-1.0 size=   14482kB time=00:00:34.52 bitrate=3436.7kbits/s speed=1.39x    frame=  759 fps= 30 q=-1.0 size=   14693kB time=00:00:34.96 bitrate=3442.9kbits/s speed=1.38x    frame=  775 fps= 30 q=-1.0 size=   15012kB time=00:00:35.60 bitrate=3454.4kbits/s speed=1.37x    frame=  787 fps= 30 q=-1.0 size=   15279kB time=00:00:36.12 bitrate=3465.1kbits/s speed=1.37x    frame=  800 fps= 30 q=-1.0 size=   15439kB time=00:00:36.64 bitrate=3451.9kbits/s speed=1.36x    frame=  812 fps= 30 q=-1.0 size=   15580kB time=00:00:37.17 bitrate=3433.2kbits/s speed=1.35x    frame=  825 fps= 29 q=-1.0 size=   15782kB time=00:00:37.68 bitrate=3431.1kbits/s speed=1.35x    frame=  837 fps= 29 q=-1.0 size=   15913kB time=00:00:38.20 bitrate=3412.5kbits/s speed=1.34x    frame=  849 fps= 29 q=-1.0 size=   16067kB time=00:00:38.68 bitrate=3402.4kbits/s speed=1.33x    frame=  862 fps= 29 q=-1.0 size=   16241kB time=00:00:39.24 bitrate=3390.5kbits/s speed=1.33x    frame=  873 fps= 29 q=-1.0 size=   16415kB time=00:00:39.73 bitrate=3384.6kbits/s speed=1.32x    frame=  886 fps= 29 q=-1.0 size=   16585kB time=00:00:40.24 bitrate=3376.3kbits/s speed=1.32x    frame=  897 fps= 29 q=-1.0 size=   16813kB time=00:00:40.72 bitrate=3382.4kbits/s speed=1.31x    frame=  911 fps= 29 q=-1.0 size=   16980kB time=00:00:41.28 bitrate=3369.6kbits/s speed=1.31x    frame=  923 fps= 29 q=-1.0 size=   17131kB time=00:00:41.80 bitrate=3357.3kbits/s speed= 1.3x    frame=  934 fps= 29 q=-1.0 size=   17276kB time=00:00:42.24 bitrate=3350.4kbits/s speed= 1.3x    frame=  947 fps= 29 q=-1.0 size=   17473kB time=00:00:42.80 bitrate=3344.4kbits/s speed=1.29x    frame=  960 fps= 29 q=-1.0 size=   17671kB time=00:00:43.32 bitrate=3341.5kbits/s speed=1.29x    frame=  972 fps= 28 q=-1.0 size=   17828kB time=00:00:43.84 bitrate=3331.3kbits/s speed=1.28x    frame=  985 fps= 28 q=-1.0 size=   18072kB time=00:00:44.36 bitrate=3337.3kbits/s speed=1.28x    frame=  998 fps= 28 q=-1.0 size=   18246kB time=00:00:44.92 bitrate=3327.3kbits/s speed=1.27x    frame= 1011 fps= 28 q=-1.0 size=   18400kB time=00:00:45.44 bitrate=3317.1kbits/s speed=1.26x    
