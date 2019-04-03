@@ -11,16 +11,14 @@
 
 <div alias="center">
 <h2>轮播任务</h2>
-<form action="/action/short_task" method="post" autocomplete="off"> {% csrf_token %}
+<form action="/action/create_act" method="post" autocomplete="off"> {% csrf_token %}
 轮播文件:<input type="text" name="reboadcast_file" value="0810TFBOY2.flv"/>      流名:<input type="text" name="stream" /> <input type="hidden" name="type" value="reboadcast"> <input type="submit" value="创建轮播任务" />
 </form>
 </br>
 <h2>动态拉流任务</h2>
-<form action="/action/short_task" method="post" autocomplete="off"> {% csrf_token %}
-拉流地址:<input type="text" name="input" />      流名:<input type="text" name="stream" />  <input type="hidden" name="template" value="kuwo-tuiliu"> <input type="submit" value="创建拉流任务" />
+<form action="/action/create_act" method="post" autocomplete="off"> {% csrf_token %}
+拉流地址:<input type="text" name="pull" />      流名:<input type="text" name="stream" />  <input type="hidden" name="type" value="act"> <input type="submit" value="创建拉流任务" />
 </form>
-</br>
-
 
 
 

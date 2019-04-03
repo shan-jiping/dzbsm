@@ -8,6 +8,7 @@ from .get_host import host_list
 from .Myansible import my_ansible,my_ansible_play
 from .models import task,task_result,group,hosts,ys_uid,hosts_group,short_task_template,short_task
 from .tasks import task_run,pb_run,short_task_run
+from action.ShortTask import CloseTask
 import logging
 import redis
 import os
@@ -19,6 +20,7 @@ import hashlib
 import random
 import datetime
 import httplib
+import re
 from email.utils import formatdate
 from users.models import UserProfile
 # Create your views here.
@@ -230,6 +232,7 @@ class kuwo_act(View):
             result = json.loads(response.read())
         except Exception, e:
             print 'ERROR: ' + str(e)
+            print 'content:',content
         http_client.close()
 
         if result['code']==0:
@@ -408,39 +411,164 @@ class mytask_result(View):
 
 
 
+class show_short_task(View):
+    def get(self,request):
+        if not request.user.is_authenticated():
+            return http.HttpResponseRedirect('/users/login')
+        else:
+            logger = logging.getLogger("django")
+            info={}
+            kuwo_key='kuwo2013rtmp'
+            opstr='listen'
+            uid='44754776'
+            roomid='1000'
+            now=int(time.time())
+            rtmp_fdl='?opstr='+opstr+'&tm='+str(now)+'&uid='+uid+'&roomid='+roomid+'&Md5='+tomd5(opstr+str(now)+uid+roomid+kuwo_key)
+            sts=short_task.objects.filter(status='running')
+            flv_list=os.listdir('media/dianpian')
+            running_zhuanma=short_task.objects.filter(template=4,status='running')
+            zhuanma_list=[]
+            for zm in running_zhuanma:
+                fn=eval(zm.source)['flvname'].split('/')[-1]
+                zhuanma_list.append(fn)
+                if fn in flv_list:
+                    del flv_list[flv_list.index(fn)]
+            
+            for st in sts:
+                kt={
+                        'reboard_task':{
+                            'command':'',
+                            'flv_file':'',
+                            'begintime':'',
+                            'task_id':'',
+                            'log':''
+                         },
+                        'rtmp_fdl':rtmp_fdl,
+                        'live_task':{
+                            'command':'',
+                            'pull':'',
+                            'begintime':'',
+                            'task_id':'',
+                            'log':''
+                        }
+                    }
+                if st.template.name == 'kuwo-tuiliu':
+                    if eval(st.source)['stream'] not in info:
+                        info[eval(st.source)['stream']]=kt
+                    info[eval(st.source)['stream']]['live_task']={
+                        'command':st.command,
+                        'pull':eval(st.source)['input'],
+                        'begintime':st.start_time,
+                        'task_id':st.id,
+                        'log':st.log
+                    }
+                elif st.template.name == 'kuwo-lunbo':
+                    if eval(st.source)['stream'] not in info:
+                        info[eval(st.source)['stream']]=kt
+                    info[eval(st.source)['stream']]['reboard_task']={
+                        'command':st.command,
+                        'flv_file':eval(st.source)['filename'],
+                        'begintime':st.start_time,
+                        'task_id':st.id,
+                        'log':st.log
+                    }
+            #logging.info(info)
+            return render(request,'short_task.html',{"info":info,"flv_list":flv_list,"zhuanma_list":zhuanma_list})
+
+
 
 class create_short_task(View):
     def post(self,request):
-        post_data={}
-        for i in request.POST:
-            post_data[i]=request.POST[i]
-        del post_data['csrfmiddlewaretoken']
-        print post_data 
-        if short_task_template.objects.filter(name=post_data['template']).exists():
-            tem=short_task_template.objects.get(name=post_data['template'])
-            rule=eval(tem.template)
-            para=True
-            for i in rule['must_parameters']:
-                if i not in post_data:
-                    para=False
-            if para:
+        if not request.user.is_authenticated():
+            return http.HttpResponseRedirect('/users/login')
+        else:
+            post_data={}
+            for i in request.POST:
+                post_data[i]=request.POST[i]
+            del post_data['csrfmiddlewaretoken']
+            logging.info(post_data)
+            if short_task_template.objects.filter(name=post_data['template']).exists():
+                tem=short_task_template.objects.get(name=post_data['template'])
+                rule=eval(tem.template)
+                para=True
+                for i in rule['must_parameters']:
+                    if i not in post_data:
+                        para=False
+                if para:
+                    task=short_task()
+                    user=request.user
+                    task.source=post_data
+                    task.template=tem
+                    task.create_user=user
+                    task.status='running'
+                    task.save()
+                    short_task_run.delay(task.id)
+                    #return HttpResponse('任务短创建成功')
+                    return http.HttpResponseRedirect('/action/short_task')
+                else:
+                    return HttpResponse('lost args')
+            else:
+                return HttpResponse('模版名错误，请确认')
+
+
+class upload_dianpian(View):
+    def post(self,request):
+        if not request.user.is_authenticated():
+            return http.HttpResponseRedirect('/users/login')
+        else:
+            if request.FILES.get('dianpan'):
+                obj = request.FILES.get('dianpan')
+                source_file=os.path.join( 'media', 'video', 'upfile-'+time.strftime("%Y%m%d%H%M%S", time.localtime())+'-'+obj.name)
+                flv_file=os.path.join( 'media', 'dianpian', time.strftime("%Y%m%d%H%M%S", time.localtime())+'-'+obj.name.split('.')[-2]+'.flv')
+                f = open(source_file, 'wb')
+                for chunk in obj.chunks():
+                    f.write(chunk)
+                f.close()
+                tem=short_task_template.objects.get(name='kuwo-dianpian')
                 task=short_task()
                 user=request.user
-                task.source=post_data
+                task.source={'sourcename': source_file, 'flvname': flv_file, 'template': 'kuwo-dianpian'}
                 task.template=tem
                 task.create_user=user
                 task.status='running'
-                task.save() 
+                task.save()
                 short_task_run.delay(task.id)
-                return HttpResponse('任务短创建成功')
-            else:
-                return HttpResponse('lost args')
+            #return HttpResponse('ok')
+            return http.HttpResponseRedirect('/action/short_task')
+
+
+class show_shrot_task_log(View):
+    def get(self,request,active_code):
+        if not request.user.is_authenticated():
+            return http.HttpResponseRedirect('/users/login')
         else:
-            return HttpResponse('模版名错误，请确认')
+            if os.path.exists('task_log/'+str(active_code)):
+               f=open('task_log/'+str(active_code),'r')
+               info=''
+               for line in f.readlines():
+                   info=info+line+'</br>'
+               f.close()
+               #info.replace('frame=','</br>frame=')
+               info=re.compile('frame=').sub('</br>frame=',info) 
+               return HttpResponse(info)
+            else:
+                return HttpResponse('日志不存在')
 
-
-
-
+class stop_short_task(View):
+    def get(self,request):
+        if not request.user.is_authenticated():
+            return http.HttpResponseRedirect('/users/login')
+        else:
+            id=request.GET.get('id')
+            if id == None:
+                return HttpResponse('参数错误')
+            else:
+                CloseTask(id)
+                task=short_task.objects.get(id=id)
+                if task.status=='done':
+                    return http.HttpResponseRedirect('/action/short_task/')
+                else:
+                    return HttpResponse('任务状态异常，请检查')
 
 
 class init2101(View):

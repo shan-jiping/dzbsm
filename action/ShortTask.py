@@ -8,8 +8,13 @@ import re
 import os
 import time
 import signal
+<<<<<<< HEAD
+import datetime
+import logging
+=======
 import chardet
 
+>>>>>>> d1a1f1f742cbe68168de503eff9445fe17244499
 
 
 def CloseTask(id):
@@ -18,7 +23,7 @@ def CloseTask(id):
     revoke(task.celery_task_id, terminate=True)
     time.sleep(2)
     for i in range(0,3):
-        fpid=os.popen("lsof "+task.log+" | grep ffmpeg |awk '{print $2}'|sort|uniq|head -n 1").read().strip()
+        fpid=os.popen("lsof "+task.log+" | grep "+eval(task.template.template)['executable']+" |grep -v grep |awk '{print $2}'|sort|uniq|head -n 1").read().strip()
         if fpid != '':
            try:
                os.kill(int(fpid), signal.SIGKILL)
@@ -26,6 +31,7 @@ def CloseTask(id):
                print e
         else:
            break
+    task.end_time=datetime.datetime.now()
     task.status='done'
     task.save()
 
@@ -33,12 +39,14 @@ def CloseTask(id):
 class ShortTask(object):
     def __init__(self,id,global_options=None):
         task=short_task.objects.get(id=id)
+        self.id=id
         tem=eval(short_task_template.objects.get(id=task.template_id).template)
+        self.tem_name=short_task_template.objects.get(id=task.template_id).name
         source=eval(task.source)
         self.executable = tem['executable']
         self._cmd = [self.executable]
         self.logfile=task.log
-
+        logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(filename)s %(process)d %(levelname)s %(message)s',datefmt='%Y %m %d %H:%M:%S',filename=self.logfile,filemode='a')
         global_options = global_options or []
         # add global_options  
         if _is_sequence(global_options): # global_options is a class
@@ -62,6 +70,8 @@ class ShortTask(object):
         return '<{0!r} {1!r}>'.format(self.__class__.__name__, self.cmd)
 
     def run(self, input_data=None, stdout=None, stderr=None):
+        logging.info('short_task id:'+str(self.id)+' template '+str(self.tem_name) )
+        logging.info('command '+str(self.cmd))
         try:
             #print self._cmd
             #self._cmd=self._cmd.append('>>'+self.logfile)
@@ -83,12 +93,11 @@ class ShortTask(object):
                 raise STExecutableNotFoundError("Executable '{0}' not found".format(self.executable))
             else:
                 raise
-
         out = self.process.communicate(input=input_data)
         if self.process.returncode != 0:
             raise STRuntimeError(self.cmd, self.process.returncode, out[0], out[1])
-
         return out
+
 
 class STExecutableNotFoundError(Exception):
     """Raise when executable was not found."""

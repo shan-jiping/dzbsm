@@ -3,3 +3,4 @@ TGT
 action/hosts
 celerybeat-schedule
 logs/*
+task_log

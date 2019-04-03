@@ -66,14 +66,14 @@ class short_task(models.Model):
     start_time=models.DateTimeField(default=datetime.now, verbose_name=u"开始时间")
     end_time=models.DateTimeField(default=datetime.now,verbose_name=u"结束时间",null=False)
     status=models.CharField(choices=status_CHOICES, max_length=15, verbose_name=u"状态")
-    log=models.CharField(max_length=50, verbose_name=u"任务日志",null=True, blank=True)
+    log=models.CharField(max_length=100, verbose_name=u"任务日志",null=True, blank=True)
     result=models.CharField(max_length=50, verbose_name=u"任务结果",null=True, blank=True)
     command=models.CharField(max_length=1000, verbose_name=u"运行命令",null=True, blank=True)
     class Meta:
         verbose_name = u"短任务任务"
         verbose_name_plural = verbose_name
     def __unicode__(self):
-        return self.celery_task_id
+        return str(self.celery_task_id)
 
 class task(models.Model):
     action_CHOICES=(

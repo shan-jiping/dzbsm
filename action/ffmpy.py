@@ -83,7 +83,7 @@ class FFmpeg(object):
         try:
             f=open(self.logfile,'a')
             self.process = subprocess.Popen(
-                self._cmd+' >>'+self.logfile,
+                self._cmd,
                 stdin=subprocess.PIPE,
                 stdout=f.fileno(),
                 stderr=f.fileno()

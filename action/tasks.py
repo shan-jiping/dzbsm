@@ -84,14 +84,18 @@ def short_task_run(self,task_id):
         print 'nokill task'
         while True:
             try:
+                logging.info('short_task id:'+str(task_id)+' template_type '+str(template_type) )
                 ct.run()
             except Exception, e:
+                logging.info('restart task '+str(task_id))
                 print e
-    elif template_type=='defalt':
-        ct=ShortTask(task_id)
-        logging.info('start ShotTask:'+str(task_id)+' command:'+task.command)
+            time.sleep(2)
+    elif template_type=='default':
+        logging.info('short_task id:'+str(task_id)+' template_type '+str(template_type) )
         try:
             ct.run()
+            task.result='done'
+            task.save()
         except Exception, e:
             print e    
 
