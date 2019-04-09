@@ -94,10 +94,10 @@ def short_task_run(self,task_id):
         logging.info('short_task id:'+str(task_id)+' template_type '+str(template_type) )
         try:
             ct.run()
-            task.result='done'
-            task.save()
         except Exception, e:
             print e    
+        task.status='done'
+        task.save()
 
 
 

@@ -232,7 +232,6 @@ class kuwo_act(View):
             result = json.loads(response.read())
         except Exception, e:
             print 'ERROR: ' + str(e)
-            print 'content:',content
         http_client.close()
 
         if result['code']==0:
@@ -525,12 +524,29 @@ class upload_dianpian(View):
                     f.write(chunk)
                 f.close()
                 tem=short_task_template.objects.get(name='kuwo-dianpian')
+        post_data={}
+        for i in request.POST:
+            post_data[i]=request.POST[i]
+        post_data['sourcename']=source_file
+        post_data['flvname']=flv_file
+        del post_data['csrfmiddlewaretoken']
+        logging.info( post_data )
+        if short_task_template.objects.filter(name=post_data['template']).exists():
+            tem=short_task_template.objects.get(name=post_data['template'])
+            rule=eval(tem.template)
+            para=True
+            for i in rule['must_parameters']:
+                if i not in post_data:
+                    logging.info('para:'+str(para)+'  must_parameters lost '+str(i))
+                    para=False
+            if para:
                 task=short_task()
                 user=request.user
                 task.source={'sourcename': source_file, 'flvname': flv_file, 'template': 'kuwo-dianpian'}
                 task.template=tem
                 task.create_user=user
                 task.status='running'
+                logging.info(task.__dict__)
                 task.save()
                 short_task_run.delay(task.id)
             #return HttpResponse('ok')

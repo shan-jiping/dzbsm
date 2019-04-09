@@ -240,6 +240,7 @@ djcelery.setup_loader()
 
 BROKER_URL = 'redis://localhost:6379/2'
 backend = 'redis://127.0.0.1:6379/2'
+BROKER_URL = 'redis://127.0.0.1:6379/0'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 #CELERY_RESULT_BACKEND = 'redis://localhost:6379/2'

@@ -8,13 +8,10 @@ import re
 import os
 import time
 import signal
-<<<<<<< HEAD
 import datetime
 import logging
-=======
 import chardet
 
->>>>>>> d1a1f1f742cbe68168de503eff9445fe17244499
 
 
 def CloseTask(id):
@@ -75,18 +72,18 @@ class ShortTask(object):
         try:
             #print self._cmd
             #self._cmd=self._cmd.append('>>'+self.logfile)
-            #f=open(self.logfile,'a')
+            f=open(self.logfile,'a')
             for i in self._cmd:
                 adchar=chardet.detect(i)
-                print i,type(i),adchar
+                #print i,type(i),adchar
             self.process = subprocess.Popen(
                 self._cmd,
                 #self.cmd,
                 stdin=subprocess.PIPE,
-                #stdout=f.fileno(),
-                #stderr=f.fileno()
-                stdout=stdout,
-                stderr=stderr
+                stdout=f.fileno(),
+                stderr=f.fileno()
+                #stdout=self.logfile,
+                #stderr=self.logfile
             )
         except OSError as e:
             if e.errno == errno.ENOENT:

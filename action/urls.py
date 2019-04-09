@@ -18,5 +18,7 @@ urlpatterns = [
     url('^short_task',show_short_task.as_view(),name="short_task_list"),
     url('^upload_dianpian',upload_dianpian.as_view(),name="upload_dianpian"),
     url('^task_log/(?P<active_code>.*)/$',show_shrot_task_log.as_view(),name="show_shrot_task_log"),
-    url('^stop_short_task',stop_short_task.as_view(),name="stop_short_task")
+    url('^stop_short_task',stop_short_task.as_view(),name="stop_short_task"),
+    url('^short_task',create_short_task.as_view(),name="short_task"),
+    url('^kuwo',get_kuwoact.as_view(),name="kuwo_act_fdl")
 ]
