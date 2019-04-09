@@ -83,9 +83,11 @@ def short_task_run(self,task_id):
     if template_type=='nokill':
         print 'nokill task'
         while True:
+            task=short_task.objects.get(id=task_id)
             try:
-                logging.info('short_task id:'+str(task_id)+' template_type '+str(template_type) )
-                ct.run()
+                if task.status != 'done':
+                    logging.info('short_task id:'+str(task_id)+' template_type '+str(template_type)+'  status '+str(task.status) )
+                    ct.run()
             except Exception, e:
                 logging.info('restart task '+str(task_id))
                 print e

@@ -17,20 +17,24 @@ import chardet
 def CloseTask(id):
     from celery.task.control import revoke
     task=short_task.objects.get(id=id)
-    revoke(task.celery_task_id, terminate=True)
-    time.sleep(2)
-    for i in range(0,3):
-        fpid=os.popen("lsof "+task.log+" | grep "+eval(task.template.template)['executable']+" |grep -v grep |awk '{print $2}'|sort|uniq|head -n 1").read().strip()
+    task.end_time=datetime.datetime.now()
+    task.status='done'
+    task.save()
+    #revoke(task.celery_task_id, terminate=True)
+    #time.sleep(2)
+    for i in range(0,5):
+        fpid=os.popen("lsof "+task.log+" | grep "+eval(task.template.template)['executable'].split('/')[-1]+" |grep -v grep |awk '{print $2}'|sort|uniq|head -n 1").read().strip()
+        logging.info('time:'+str(i)+'  pid '+str(fpid))
         if fpid != '':
            try:
                os.kill(int(fpid), signal.SIGKILL)
+               logging.info('kill '+str(fpid))
+               logging.info()
            except Exception, e:
                print e
         else:
            break
-    task.end_time=datetime.datetime.now()
-    task.status='done'
-    task.save()
+        time.sleep(1)
 
 
 class ShortTask(object):
