@@ -30,6 +30,13 @@
 </form>
 </br>
 </br>
+<h2>纯音频任务</h2>
+<form action="/action/create_short_task" method="post" autocomplete="off"> {% csrf_token %}
+拉流地址:<input type="text" name="input" />      流名:<input type="text" name="stream" value="125380647" />  <input type="hidden" name="template" value="kuwo-voice"> <input type="submit" value="创建纯音频任务" />
+</form>
+</br>
+</br>
+
 <h2>酷我垫片转码</h2>
 <form action="/action/upload_dianpian" method="post" autocomplete="off" enctype="multipart/form-data" > {% csrf_token %}
 选择垫片文件:<input type="file" name="dianpan" /> <input type="hidden" name="template" value="kuwo-dianpian"> <input type="submit" value="上传垫片" />

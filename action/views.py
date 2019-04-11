@@ -461,6 +461,16 @@ class show_short_task(View):
                         'task_id':st.id,
                         'log':st.log
                     }
+                elif st.template.name == 'kuwo-voice':
+                    if eval(st.source)['stream'] not in info:
+                        info[eval(st.source)['stream']]=kt
+                    info[eval(st.source)['stream']]['live_task']={
+                        'command':st.command,
+                        'pull':eval(st.source)['input'],
+                        'begintime':st.start_time,
+                        'task_id':st.id,
+                        'log':st.log
+                    }
                 elif st.template.name == 'kuwo-lunbo':
                     if eval(st.source)['stream'] not in info:
                         info[eval(st.source)['stream']]=kt
