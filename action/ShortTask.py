@@ -23,7 +23,7 @@ def CloseTask(id):
     #revoke(task.celery_task_id, terminate=True)
     #time.sleep(2)
     for i in range(0,5):
-        fpid=os.popen("lsof "+task.log+" | grep "+eval(task.template.template)['executable'].split('/')[-1]+" |grep -v grep |awk '{print $2}'|sort|uniq|head -n 1").read().strip()
+        fpid=os.popen("lsof "+str(task.log)+" | grep "+eval(task.template.template)['executable'].split('/')[-1]+" |grep -v grep |awk '{print $2}'|sort|uniq|head -n 1").read().strip()
         logging.info('time:'+str(i)+'  pid '+str(fpid))
         if fpid != '':
            try:
